@@ -5,10 +5,389 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ModMaveGo</title>
   <link rel="icon" href="https://i.postimg.cc/hjJT8ncm/284-20250713133208.png" type="image/png">
-  <link rel="stylesheet" href="/css/styles.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bitcount+Grid+Double:wght@100..900&family=Neucha&family=Rubik+Scribble&family=WDXL+Lubrifont+TC&display=swap" rel="stylesheet">
+  <style>
+    * {
+      font-family: "Neucha", sans-serif;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #262C2E;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      position: relative;
+    }
+  
+    .loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #262C2E;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      transition: opacity 0.5s ease;
+    }
+
+    .loader.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .loader .dots {
+      display: flex;
+      gap: 10px;
+    }
+
+    .loader .dot {
+      color: #5794D1;
+      font-size: 4rem;
+      animation: bounce 0.6s infinite ease-in-out;
+    }
+
+    .loader .dot:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .loader .dot:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+
+    @keyframes bounce {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-20px);
+      }
+    }
+  
+    .logo {
+      font-family: "Neucha", sans-serif;
+      font-weight: 700;
+      position: fixed;
+      top: 0px;
+      left: 20px;
+      z-index: 100;
+    }
+  
+    .banner {
+      display: flex;
+      background-color: #33393b;
+      width: 100%;
+      position: fixed;
+      padding: 25px 0;
+      top: 0px;
+      left: 0px;
+      z-index: 98;
+      margin: 0 auto;
+      justify-content: space-between;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .logo a {
+      color: #5794D1;
+      font-size: 2rem;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .menu-toggle {
+      position: fixed;
+      top: 10px;
+      right: 20px;
+      z-index: 100;
+      background: none;
+      border: none;
+      color: #5794D1;
+      font-size: 1.5rem;
+      cursor: pointer;
+      text-decoration: none;
+      transition: color 0.3s ease;
+      -webkit-text-stroke: 0.3px #000;
+    }
+
+    .menu-toggle:hover {
+      color: #EDEDED;
+    }
+
+    .menu {
+      position: fixed;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: #262C2E;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 101;
+      transition: left 0.7s ease;
+    }
+
+    .menu.open {
+      left: 0;
+    }
+
+    .menu .close-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: none;
+      border: none;
+      color: #5794D1;
+      font-size: 2rem;
+      cursor: pointer;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .menu .close-btn:hover {
+      color: #EDEDED;
+    }
+
+    .menu ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .menu li a {
+      display: block;
+      padding: 15px 30px;
+      font-size: 2rem;
+      text-decoration: none;
+      border-radius: 10px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      text-align: center;
+      width: 100%;
+    }
+
+    .menu li a.active {
+      background: #5794D1;
+      color: #262C2E;
+    }
+
+    .menu li a:not(.active) {
+      background: #33393b;
+      color: #EDEDED;
+    }
+
+    .container {
+      max-width: 800px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    .container.visible {
+      opacity: 1;
+    }
+
+    .section {
+      background: #33393b;
+      border-radius: 15px;
+      padding: 20px;
+      width: 100%;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      z-index: 97
+    }
+
+    h1 {
+      color: #5794D1;
+      text-align: center;
+      font-size: 3.5rem;
+      font-family: "Rubik Scribble", sans-serif;
+    }
+  
+    .title-1 {
+      color: #5794D1;
+      text-align: center;
+      font-size: 3rem;
+      font-family: "Rubik Scribble", sans-serif;
+    }
+  
+    .title-2 {
+      color: #5794D1;
+      text-align: center;
+      font-size: 2.1rem;
+      font-family: "Rubik Scribble", sans-serif;
+    }
+
+    p {
+      color: #EDEDED;
+      text-align: center;
+      font-size: 2rem;
+      margin: 20px 0;
+    }
+  
+    .page-cont {
+      color: #5794D1;
+      text-align: left;
+      font-size: 2rem;
+      margin: 10px 0;
+    }
+  
+    .section-cont {
+      background: #33393b;
+      border-radius: 15px;
+      padding: 10px;
+      width: 100%;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      z-index: 97
+    }
+  
+    .tag-a {
+      text-decoration: none;
+      text-align: center;
+      color: #5794D1;
+      -webkit-text-stroke: 0.3px #000;
+    }
+  
+    .tag-a:hover {
+      color: #ededed;
+    }
+
+    .btn {
+      display: block;
+      margin: 0 auto;
+      padding: 10px 20px;
+      background: #5794D1;
+      color: #ededed;
+      text-align: center;
+      text-decoration: none;
+      border-radius: 5px;
+      font-size: 1.5rem;
+      transition: background 0.3s ease, transform 0.3s ease;
+    }
+
+    .btn:hover {
+      background: #EDEDED;
+      color: #262c2e;
+      transform: translateY(-2px);
+    }
+  
+    .mavetnt-btn {
+      display: inline-block;
+      margin: 0 auto;
+      padding: 10px 20px;
+      background: #5794D1;
+      color: #ededed;
+      text-align: center;
+      text-decoration: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      transition: background 0.3s ease, transform 0.3s ease;
+    }
+
+    .mavetnt-btn:hover {
+      background: #EDEDED;
+      color: #262c2e;
+      transform: translateY(-2px);
+    }
+  
+    .unactive-btn {
+      display: block;
+      margin: 0 auto;
+      padding: 10px 20px;
+      background: #202020;
+      color: #EDEDED;
+      text-align: center;
+      text-decoration: none;
+      border-radius: 5px;
+      font-size: 1.5rem;
+      transition: background 0.3s ease, transform 0.3s ease;
+    }
+  
+    .description-p {
+      font-size: 1rem;
+      text-align: center;
+      text-decoration: none;
+    }
+  
+    .description-title {
+      font-size: 1.5rem;
+      text-align: center;
+      text-decoration: none;
+    }
+  
+    input[type="text"] {
+      color: #ededed;
+      background-color: #1a1a1a;
+      border: none;
+      padding: 10px;
+      border-radius: 5px;
+    }
+    input[type="text"]::placeholder {
+      color: #5794D1;
+    }  
+
+    .page {
+      display: none;
+      opacity: 0.6;
+      transform: translateY(-20px);
+    }
+
+    .page.active {
+      display: block;
+      animation: slideIn 0.5s ease forwards;
+    }
+
+    @keyframes slideIn {
+      0% {
+        opacity: 0.6;
+        transform: translateY(-20px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  
+    .version-active {
+      display: inline;
+      text-align: left;
+      color: #5794D1;
+      font-size: 2rem;
+      text-decoration: underline;
+    }
+  
+    .version {
+      display: inline;
+      margin: 0 auto;
+      padding: 0px 10px;
+      color: #ededed;
+      text-align: center;
+      text-decoration: none;
+      border-radius: 5px;
+      font-size: 2rem;
+    }
+
+    .slide img {
+      max-width: 500px;
+      max-height: 400px;
+      object-fit: contain;
+      border-radius: 15px;
+      border: 2px solid #333;
+      box-sizing: border-box;
+    }
+  </style>
 </head>
 <body link="#5794D1" vlink="#EDEDED" alink="#EDEDED">
   <div class="loader">
